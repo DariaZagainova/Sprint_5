@@ -2,17 +2,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from curl import Urls
 from locators import TestsLocators
+from helpers import login_user
 
 class TestLoginFromDifferentPages:
-
-    # Функция авторизует пользователя по email-паролю и проверяет успешный вход. Используется во всех тестах класса.
-    def login_user(self, driver, email, password):
-        driver.find_element(*TestsLocators.EMAIL_INPUT_LOGIN).send_keys(email)      
-        driver.find_element(*TestsLocators.PASSWORD_INPUT_LOGIN).send_keys(password)  
-        driver.find_element(*TestsLocators.LOGIN_BUTTON).click()   
-        WebDriverWait(driver, 3).until(EC.presence_of_element_located(TestsLocators.ORDER_BUTTON))
-
-        assert driver.current_url == Urls.MAIN_PAGE
 
 
     # Вход по кнопке «Войти в аккаунт» на главной
@@ -24,7 +16,8 @@ class TestLoginFromDifferentPages:
         WebDriverWait(driver, 3).until(EC.presence_of_element_located(TestsLocators.LOGIN_BUTTON))
 
         email, password = registered_user
-        self.login_user(driver, email, password)
+        login_user(driver, email, password)
+        assert driver.current_url == Urls.MAIN_PAGE
 
 
     # Вход через кнопку «Личный кабинет»
@@ -36,7 +29,8 @@ class TestLoginFromDifferentPages:
         WebDriverWait(driver, 3).until(EC.presence_of_element_located(TestsLocators.LOGIN_BUTTON))
 
         email, password = registered_user
-        self.login_user(driver, email, password)
+        login_user(driver, email, password)
+        assert driver.current_url == Urls.MAIN_PAGE
 
 
     # Вход через кнопку в форме регистрации
@@ -46,7 +40,8 @@ class TestLoginFromDifferentPages:
         driver.find_element(*TestsLocators.LOGIN_LINK_ON_REGISTRATION_PAGE).click()
 
         email, password = registered_user
-        self.login_user(driver, email, password)
+        login_user(driver, email, password)
+        assert driver.current_url == Urls.MAIN_PAGE
 
 
     # Вход через кнопку в форме восстановления пароля
@@ -61,5 +56,5 @@ class TestLoginFromDifferentPages:
         driver.find_element(*TestsLocators.REMEMBERED_PASSWORD_LOGIN__LINK_TEXT).click()
 
         email, password = registered_user
-        self.login_user(driver, email, password)
-        
+        login_user(driver, email, password)
+        assert driver.current_url == Urls.MAIN_PAGE
